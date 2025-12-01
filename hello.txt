@@ -1,0 +1,124 @@
+docker version
+docker pull redis
+docker run --name my-redis -d redis
+docker ps
+docker exec -it my-redis redis-cli
+SET name "Alice"
+GET name
+EXIT
+docker stop my-redis
+docker start my-redis
+docker rm my-redis
+
+FROM redis:latest
+CMD ["redis-server"]
+docker build -t redisnew  .
+docker run --name myredisnew -d redisnew
+docker ps
+docker stop myredisnew
+docker login
+docker ps -a
+docker commit 0e993d2009a1  vaishnavigunda/redis1
+docker images
+docker push vaishnavigunda/redis1
+docker rm 9fee4182d762
+docker rmi vaishnavigunda/redis1
+doker logout
+docker pull vaishnavigunda/redis1
+docker run --name myredis -d vaishnavigunda/redis1
+docker exec -it myredis redis-cli
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compose-lab folder
+docker-compose.yml
+
+version: "3.9"
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "7070:80"
+    depends_on:
+      - redis
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: demo_db
+
+  redis:
+    image: redis:alpine
+
+
+docker compose up -d
+docker compose down
+docker compose up -d
+docker compose ps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Networking + Persistent Storage
+
+version: "3.9"
+
+networks:
+  app-net:
+
+volumes:
+  db-data:
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    networks:
+      - app-net
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: demo_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-net
+
+docker compose up -d
+docker exec -it compose-lab-db-1 psql -U demo -d demo_db
+CREATE TABLE test (id INT);
+INSERT INTO test VALUES (1);
+\q
+docker compose down
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+app.py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Flask + Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+dockerfile
+
+FROM python:3.10-slim
+WORKDIR /app
+COPY app.py /app/
+RUN pip install flask
+CMD ["python", "app.py"]
+
+docker_compose.yml
+
+
+
+
+
