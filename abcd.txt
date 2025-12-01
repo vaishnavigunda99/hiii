@@ -1,0 +1,101 @@
+Minikube start
+
+kubectl create deployment mynginx --image=nginx
+
+Kubectl get deployments
+
+Kubectl expose deployment mynginx --type = NodePort
+
+--port=80 --target-port=80
+
+kubectl scale deployment myngix --replicas=4
+
+kubectl get deployments
+
+kubectl get pods
+
+kubectl port-forward svc/mynginx 8081:80
+
+
+new
+minikube dashboard
+
+
+
+to clean up
+
+kübeckl detele deployment mynginx
+
+kubectl delete service myngix
+
+minikube stop
+
+
+
+docker username:phaniharika1
+docker info
+docker pull jasonrivers/nagios:latest
+docker run -d --name nagios -p 9090:80 jasonrivers/nagios:latest
+Default login:
+
+User: nagiosadmin
+
+Password: nagios
+
+
+
+
+
+
+
+
+
+pipeline {
+
+agent any
+
+tools{
+
+maven 'MAVEN HOME
+
+stages {
+
+stage('git repo & clean') {
+
+steps {
+
+//bat "rmdir /s /q SampleMaven JavaProject"
+
+bat "git clone https://github.com/budarajumadhurika/SampleMavenJavaPro
+
+bat "mvn clean -f SampleMaven JavaProject"
+
+stage('install') { }
+
+}
+
+steps {
+
+bat "mvn install -f SampleMavenJavaProject"
+
+}
+
+}
+
+stage('test') {
+
+steps {
+
+bat "mvn test -f SampleMavenJavaProject"
+
+}
+
+} stage('package') {
+
+steps {
+
+bat "myn package -f SampleMaven JavaProject"
+
+}
+
+}
